@@ -1,0 +1,41 @@
+name: Verify skill references
+
+on:
+  pull_request:
+    branches: [main, master]
+  push:
+    branches: [main, master]
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Check no credentials are tracked
+        run: python3 scripts/check_no_secrets.py
+      - name: Install YAML parser
+        run: python3 -m pip install --quiet pyyaml
+      - name: Check SKILL.md frontmatter parses
+        run: python3 scripts/check_frontmatter.py
+      - name: Check relative Markdown references
+        run: python3 scripts/check_markdown_references.py
+      - name: Check the untrusted-content rule travels with the reading skills
+        run: python3 scripts/check_untrusted_rule.py
+      - name: Check text I/O states its encoding
+        run: python3 scripts/check_text_encoding.py
+      - name: Check the catalog tools the skills name exist
+        # Exit 2 means the catalog server was unreachable: reported, not failed.
+        run: |
+          set +e
+          python3 scripts/check_tools.py --live
+          status=$?
+          set -e
+          if [ "$status" -eq 2 ]; then
+            echo "::warning::catalog server unreachable, live tool check skipped"
+            python3 scripts/check_tools.py
+            exit $?
+          fi
+          exit "$status"

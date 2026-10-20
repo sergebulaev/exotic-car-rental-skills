@@ -1,0 +1,2 @@
+# Checks only (the skills and lib/carrentallist_client.py need no packages)
+pyyaml>=6.0
