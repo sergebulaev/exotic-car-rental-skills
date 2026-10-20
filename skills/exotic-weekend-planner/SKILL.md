@@ -37,12 +37,13 @@ known car (use `exotic-rental-cost`).
 1. **Cars in budget.** `search_vehicles` with `city`, `state`, `max_price`
    (budget), `make` if a must-have, `priced_only: true`, `limit` 20.
 2. **Companies that fit.** `search_companies` with `city`, `state`,
-   `delivery: "yes"` when delivery is wanted, `max_min_age` from the driver's
+   `delivery: "fee"` when delivery is wanted (`"yes"` only means free), `max_min_age` from the driver's
    age; keep cars from those companies.
 3. **What's new.** `catalog_highlights` with `kind: "new_arrivals"`, then
    `"price_drops"`, for the city: a fresh car or a deal worth showing.
-4. **Terms.** `get_company` for the top 2: included miles, per-mile price,
-   deposit, delivery fee.
+4. **Terms.** `get_company` (with `--json` on the client) for the top 2:
+   included miles, deposit, delivery offered. The per-mile price and the
+   delivery fee are never in the catalog: list them as "ask".
 5. **Route and miles.** Propose 2 drives per day with the user's wishes; give
    approximate distances and compare the total with included miles x days.
    Distances are approximate: tell the user to check them in a maps app.
@@ -52,8 +53,8 @@ known car (use `exotic-rental-cost`).
 1. **The pick**: car, company, rate, why it fits, link. One alternative.
 2. **Plan**: Day 1, Day 2 (pickup or delivery time, drives, a stop worth it,
    return).
-3. **Miles check**: planned vs included, overage cost when the per-mile price is
-   published.
+3. **Miles check**: planned vs included; excess miles priced only if the user
+   has the company's per-mile price.
 4. **Cost**: rental charges from published rates, deposit, and the blanks
    (taxes, insurance).
 5. **Before you book**: the unanswered checklist items.

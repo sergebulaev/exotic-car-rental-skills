@@ -38,8 +38,9 @@ Keep it to 2 to 5 calls.
 
 1. **Cars.** `search_vehicles` with `city`, `state`, `make` and `model` (or
    `class`), `priced_only` false so "Contact for price" cars are not hidden,
-   `max_price` when there is a budget, `sort: "price_asc"` for "cheapest",
-   `limit` 20.
+   `sort: "price_asc"` for "cheapest", `limit` 20. Do not pass `max_price`: it
+   drops every "Contact for price" car. Apply the budget yourself and keep
+   unpriced cars as "Contact for price".
 2. **Nothing in the city?** `vehicle_availability` with `model` (and `make`):
    the nearest states and cities that list it. Say so plainly.
 3. **Terms that filter.** If the user gave an age, a deposit limit or needs
@@ -48,7 +49,8 @@ Keep it to 2 to 5 calls.
    from companies that pass, and say how many were dropped and why.
 4. **Fair price check.** `price_overview` for the make and model in the city, to
    label each shortlisted rate as below, inside or above the middle half.
-5. Optional: `get_company` for the top 1 or 2 when the user wants details.
+5. Optional: `get_company` (with `--json` on the client) for the top 1 or 2
+   when the user wants details.
 
 ## Output
 
@@ -57,9 +59,9 @@ Keep it to 2 to 5 calls.
    `**<Year Make Model>**, <rate>/day (or Contact for price), <Company> (<city>)`
    then one line of terms (minimum age, deposit, miles, delivery: published or
    "ask"), then the carrentallist.com link.
-3. **Price context**: "Median $<m> over <N> cars at <C> companies; the middle
-   half is $<q1> to $<q3>." Flag rates at the catalog floor as "check the
-   listing, may be hourly".
+3. **Price context**: "Median $<m> over <N> priced cars; the middle half is
+   $<q1> to $<q3>." Flag rates at the catalog floor as "check the listing, may
+   be hourly".
 4. **Before you book**: the items from
    [references/renter-checklist.md](../../references/renter-checklist.md) the
    catalog did not answer, as a short list.

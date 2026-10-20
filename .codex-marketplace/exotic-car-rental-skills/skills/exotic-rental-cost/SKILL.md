@@ -34,17 +34,21 @@ whole trip (use `exotic-weekend-planner`).
 ## Workflow
 
 1. `price_overview` with `make`, `model`, `city`, `state`: market median and
-   middle half, sample size. Widen to the state if under 5 priced cars.
-2. If a company is named or chosen: `get_company` with its `slug` for the
+   middle half, sample size. A city search is that city only, not its metro: if
+   under 5 priced cars, widen to the state, then `vehicle_availability` for
+   where the model is listed at all.
+2. If a company is named or chosen: `get_company` with its `slug` (with
+   `--json` on the client, the terms are in the structured content) for the
    published rate of that car, deposit, included miles, delivery and insurance
    terms. Otherwise `search_companies` with `city`, `state`, `make` for the
    terms norms (deposit, minimum age, mileage), with how many companies publish
    each.
 3. Build the cost table with only known numbers:
    - rate x days
-   - mileage overage = max(0, planned miles - included miles x days) x per-mile
-     price, only when both are published or given
-   - delivery, if published
+   - miles: planned miles against `miles_included` x days when published. The
+     catalog never has the per-mile overage price: the excess miles are
+     "ask the price per extra mile" (compute the cost only if the user gives it)
+   - delivery: offered or not (`delivery` yes/fee); the fee is always "ask"
    - deposit (held, not spent; when it comes back)
    - everything else as a named blank: taxes, insurance or waiver, fees
 4. Fairness: place the rate below, inside or above the market middle half, and

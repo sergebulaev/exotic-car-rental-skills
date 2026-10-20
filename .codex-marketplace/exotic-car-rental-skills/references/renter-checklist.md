@@ -60,6 +60,10 @@ Minimum age for exotic rentals is commonly 21 or 25 and differs by company and
 by car; `search_companies` with `max_min_age` filters by the published minimum.
 Some companies charge a young-driver fee or ask for a larger deposit.
 
+Only the renter and the drivers named on the agreement may drive, and each must
+meet the minimum age. A friend or a teenager behind the wheel of a car rented
+by someone else usually voids the agreement and the insurance.
+
 ## At pickup and return
 
 - Walk around the car with the staff, photograph every panel, each wheel close

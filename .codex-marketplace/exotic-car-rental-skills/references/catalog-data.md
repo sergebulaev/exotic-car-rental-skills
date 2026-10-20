@@ -38,7 +38,7 @@ Full guide: https://mcp.carrentallist.com/
 library only. The script is at `lib/carrentallist_client.py` in this bundle's
 root: from a skill's folder that is `../../lib/carrentallist_client.py`. After a
 plugin install the working directory is the user's project, so call it by that
-full path (for example `python3 ~/.claude/plugins/.../car-rental-skills/lib/carrentallist_client.py`),
+full path (for example `python3 ~/.claude/plugins/.../exotic-car-rental-skills/lib/carrentallist_client.py`),
 not by a relative one.
 
 ```bash
@@ -49,6 +49,21 @@ python3 lib/carrentallist_client.py search_companies '{"city": "Miami", "state":
 
 If neither works (no network, no shell), say so and ask the user for the
 numbers. Do not fill the gap from memory: rental rates move every season.
+
+**Text or JSON.** The client prints the tool's text answer by default. Add
+`--json` for `get_company` and `search_companies`: the structured content holds
+fields the text leaves out (`claimed`, every `terms` field, `price_history_recent`,
+`as_of`). A connector returns both.
+
+## Published rental terms (the only ones that exist)
+
+`terms` on a company is either null (nothing published) or these fields, each
+of which can be null: `min_age`, `deposit_min`, `deposit_max`, `miles_included`
+(per day), `unlimited_miles`, `min_rental_hours`, `delivery` (`"yes"` = delivery
+offered with no fee mentioned, `"fee"` = delivery for a fee), `insurance_required`,
+plus `url` and `checked_at` (where and when it was read). There is **no per-mile
+overage price, delivery fee, tax or cancellation policy** in the catalog: those
+are always "ask the company". Terms are per company, not per car.
 
 ## Which tool answers which question
 
@@ -67,7 +82,11 @@ numbers. Do not fill the gap from memory: rental rates move every season.
 | One search across companies, models, cities and news | `search`, then `fetch` | `query`, `id` |
 
 City names need their state when the name is ambiguous (`"city": "Miami",
-"state": "FL"`). Lists come in pages: pass the returned cursor (`next_cursor` in structured
+"state": "FL"`). A city search returns that city only, not its metro area
+(Beverly Hills, Orange County and Los Angeles are separate cities): when a city
+has little, widen to the state and name the cities the results come from.
+Company counts: `price_overview` returns cars, not companies; take the company
+count from the `search_vehicles` or `search_companies` answer. Lists come in pages: pass the returned cursor (`next_cursor` in structured
 content, "call again with cursor" in the text) as `cursor` for more.
 
 ## Rules for using the numbers
@@ -75,15 +94,15 @@ content, "call again with cursor" in the text) as `cursor` for more.
 1. **Published rates only.** Quote the minimum, median and middle half that
    `price_overview` returns. Never invent a rate, round one to look nicer, or
    fill a missing one with a typical figure.
-2. **State the sample.** "Median $<m> over <N> cars at <C> companies with a
-   published rate in <city>" is a fact. "They go for about $X" is not.
+2. **State the sample.** "Median $<m> over <N> priced cars in <city>" is a
+   fact (add "at <C> companies" when a search answer gave you the count). "They go for about $X" is not.
 3. **Floors are not bargains.** The server drops machine-read rates under
    $150/day, and under $600/day for Lamborghini, Ferrari, McLaren and
    Rolls-Royce (those are hourly, half-day or deposit figures). A car priced at
    the floor needs a check on the listing before anyone compares against it.
 4. **Thin samples get a warning.** Under 5 priced cars, or under 3 companies
-   with a priced car, in a cell: say the number is directional, name the
-   companies behind it, and widen to the state or the class.
+   among the priced cars you listed, in a cell: say the number is directional,
+   name the companies behind it, and widen to the state or the class.
 5. **Date it.** Every answer ends with "Data as of <date>". Carry that date into
    anything you write.
 6. **Ranges use "to".** Tool answers write ranges with an en dash

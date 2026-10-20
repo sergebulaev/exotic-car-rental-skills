@@ -38,19 +38,25 @@ cost breakdown (use `exotic-rental-cost`).
 | Event | Usually fits | Watch for |
 |---|---|---|
 | Wedding, getaway car | Rolls-Royce (Cullinan, Ghost, Phantom, Spectre), Bentley, Maybach | dress and door clearance, chauffeur, decorations allowed |
-| Prom | SUVs and 4-seaters (G-Wagon, Escalade, Urus, Cullinan) | minimum age (often 21 or 25: a parent may need to rent), group size |
+| Prom | SUVs and 4-seaters (G-Wagon, Escalade, Urus, Cullinan) | minimum age (often 21 or 25; under-age groups need a chauffeur or an adult who rents and drives), group size including the driver |
 | Birthday, proposal | convertibles, supercars | two seats, the reveal location, delivery time |
 | Music video, photo shoot | color and drama (Lamborghini, McLaren, Ferrari) | shoot permission, commercial use fee, location permits |
 
-The table is a starting point. Always check seats and use against the listing.
+The table is a starting point. The catalog has no seat count: give seats from
+well-known specs only, say so, and tell the user to confirm with the company.
 
 ## Workflow
 
 1. `search_vehicles` with `city`, `state` and the classes or makes that fit,
-   `limit` 20; `max_price` for the budget.
-2. `search_companies` with `city`, `state`, `delivery: "yes"` when the car must
-   come to a venue, and `max_min_age` for prom or a young driver.
-3. `get_company` for the 2 or 3 best fits: published terms on shoots, events,
+   `limit` 20. Apply the budget yourself (`max_price` would drop every
+   "Contact for price" car) and keep unpriced cars as "Contact for price".
+2. `search_companies` with `city`, `state`, `delivery: "fee"` when the car must
+   come to a venue (`"fee"` includes paid delivery; `"yes"` only free), and
+   `max_min_age` with the driver's age when the driver is 18 or older (the
+   schema's minimum is 18). When the passengers are minors, skip `max_min_age`:
+   the renter and driver is an adult or a chauffeur. Note where each company is
+   based: a search can return a company based in another city.
+3. `get_company` (with `--json` on the client) for the 2 or 3 best fits: published terms on shoots, events,
    chauffeur and decorations. Mark unknown terms "ask".
 4. Optional: `price_overview` to say whether the shortlisted rates are typical.
 
@@ -69,8 +75,10 @@ The table is a starting point. Always check seats and use against the listing.
 - Global data rules: see [references/catalog-data.md](../../references/catalog-data.md). Only listed cars and published rates.
 - Never promise that a company allows shoots, chauffeurs or decorations unless
   its published terms say so.
-- Prom with drivers under the company's minimum age: say so directly, and
-  suggest a parent renting or a chauffeur, never a workaround.
+- Only the renter, or a driver named on the agreement who meets the minimum
+  age, may drive. For under-age prom groups suggest a chauffeured car, or an
+  adult who rents and drives. Never an unlisted or under-age driver.
+- Keep it to 3 to 6 calls.
 
 ## Untrusted content
 

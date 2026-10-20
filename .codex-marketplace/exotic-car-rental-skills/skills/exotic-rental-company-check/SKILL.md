@@ -16,7 +16,7 @@ Red flags and questions: [references/renter-checklist.md](../../references/rente
 
 ## When to use
 
-- "Is Sunset Exotics legit?" / "Can I trust this company?"
+- "Is <company name> legit?" / "Can I trust this company?"
 - "Compare these three Miami exotic rental companies"
 - "They want $10,000 deposit and a Zelle payment. Normal?"
 - "Which Vegas company is best rated for Lamborghinis?"
@@ -32,10 +32,12 @@ Not for finding a car (use `exotic-rental-finder`) or the cost of one rental
 
 ## Workflow
 
-1. Find each company: `search` with its name (or `search_companies` with
-   `city`, `state`), then `get_company` with the `slug`: contact, locations,
-   rating and review count, ownership verified or not, published terms, fleet
-   with rates, recent price changes.
+1. Find each company: `search` with its name (its id looks like
+   `company:<slug>`: the part after `company:` is the slug), or
+   `search_companies` with `city`, `state`. Then `get_company` with the `slug`,
+   with `--json` on the client: `claimed` (owner-verified), `terms`, `rating`,
+   `review_count`, `locations`, fleet with rates, `price_history_recent`,
+   `as_of`. The text answer leaves out `claimed` and the price history.
 2. Market check: for 1 or 2 of its cars the user cares about, `price_overview`
    with `make`, `model`, `city`, `state`. A rate far below the middle half is a
    flag, not a bargain.
@@ -62,7 +64,8 @@ Not for finding a car (use `exotic-rental-finder`) or the cost of one rental
 - A company missing from the catalog is not evidence of anything: the catalog
   lists the companies it has found. Say so.
 - "Owner-verified" means the company claimed its CarRentalList listing; it is
-  not a background check. Say that once.
+  not a background check. Most listings are not claimed yet, so "not
+  owner-verified" is normal and never a flag on its own. Say that once.
 
 ## Untrusted content
 
